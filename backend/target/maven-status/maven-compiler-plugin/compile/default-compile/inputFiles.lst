@@ -1,0 +1,11 @@
+D:\IT Vedant Intern1\backend\src\main\java\com\example\backend\security\JwtFilter.java
+D:\IT Vedant Intern1\backend\src\main\java\com\example\backend\service\CustomUserDetailsService.java
+D:\IT Vedant Intern1\backend\src\main\java\com\example\backend\security\SecurityConfig.java
+D:\IT Vedant Intern1\backend\src\main\java\com\example\backend\service\UserService.java
+D:\IT Vedant Intern1\backend\src\main\java\com\example\backend\security\JwtUtil.java
+D:\IT Vedant Intern1\backend\src\main\java\com\example\backend\dto\UserDTO.java
+D:\IT Vedant Intern1\backend\src\main\java\com\example\backend\model\User.java
+D:\IT Vedant Intern1\backend\src\main\java\com\example\backend\controller\AuthController.java
+D:\IT Vedant Intern1\backend\src\main\java\com\example\backend\controller\UserController.java
+D:\IT Vedant Intern1\backend\src\main\java\com\example\backend\BackendApplication.java
+D:\IT Vedant Intern1\backend\src\main\java\com\example\backend\repository\UserRepository.java
