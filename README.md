@@ -103,7 +103,7 @@ The application provides a secure authentication system where users can register
 ## Clone Repository
 
 ```bash
-git clone https://github.com/your-username/your-repository.git
+git clone https://github.com/tejalbagade2005/user-management-system.git
 ```
 
 ---
