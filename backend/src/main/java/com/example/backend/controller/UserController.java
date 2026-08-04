@@ -15,8 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/users")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001", "https://user-management-system-ten-gold.vercel.app"}, allowCredentials = "true")
 public class UserController {
     private final UserService userService;
 
