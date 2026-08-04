@@ -1,5 +1,8 @@
 import api from './api';
 
+export const registerUser=(userData)=>{
+    return api.post('/api/auth/register', userData);
+}
 const authService = {
   register: (payload) => api.post('/auth/register', payload),
   login: (payload) => api.post('/auth/login', payload),
