@@ -45,7 +45,7 @@ export default function Register() {
     }
 
     const apiBaseUrl = process.env.REACT_APP_API_URL || 'https://user-management-system-5ms2.onrender.com/api';
-    const requestPayload = {
+    const requestPayload = { 
       fullName: form.fullName,
       email: form.email,
       mobile: form.mobile,
