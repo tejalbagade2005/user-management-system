@@ -52,14 +52,14 @@ public class SecurityConfig {
 public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     
-    // Sabhi Vercel deployment domains aur local ko allow karein
+    // Sabhi Vercel deployment subdomains aur local origin allow karein
     configuration.setAllowedOriginPatterns(Arrays.asList(
         "http://localhost:3000",
         "https://*.vercel.app"
     ));
     
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
+    configuration.setAllowedHeaders(Arrays.asList("*"));
     configuration.setAllowCredentials(true);
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
