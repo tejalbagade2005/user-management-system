@@ -44,7 +44,7 @@ export default function Register() {
       return;
     }
 
-    const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
+    const apiBaseUrl = process.env.REACT_APP_API_URL || 'https://user-management-system-5ms2.onrender.com/api';
     const requestPayload = {
       fullName: form.fullName,
       email: form.email,
