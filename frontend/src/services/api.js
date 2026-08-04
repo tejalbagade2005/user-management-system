@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://user-management-system-5ms2.onrender.com/api',
-
+  baseURL: process.env.REACT_APP_API_URL || 'https://user-management-system-5ms2.onrender.com/api',
 });
 
 api.interceptors.request.use(config => {
