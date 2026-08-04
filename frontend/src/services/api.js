@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://user-management-system-5ms2.onrender.com',
+  baseURL: 'https://user-management-system-5ms2.onrender.com/api',
 
 });
 
