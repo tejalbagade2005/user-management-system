@@ -15,8 +15,14 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/users")
 @CrossOrigin(origins = {"*"}, allowedHeaders = "*")
 public class UserController {
+
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
     private final UserService userService;
 
     @Autowired
