@@ -10,18 +10,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = {"*"}, allowedHeaders = "*")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<String> getAllUsers() {
+        return Arrays.asList("Test User 1", "Test User 2");
     }
     private final UserService userService;
 
