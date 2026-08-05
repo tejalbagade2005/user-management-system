@@ -20,10 +20,6 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 public class UserController {
 
-    @GetMapping
-    public List<String> getAllUsers() {
-        return Arrays.asList("User 1", "User 2");
-    }
     private final UserService userService;
 
     @Autowired
@@ -31,14 +27,15 @@ public class UserController {
         this.userService = userService;
     }
 
+    // Explicit root endpoint for getting all users
     @GetMapping
     public ResponseEntity<Map<String, Object>> all() {
         List<User> users = userService.getAllUsers();
         LocalDate today = LocalDate.now();
         long activeUsers = users.stream().filter(this::isActiveUser).count();
-        long newUsersToday = users.stream().filter(user -> user.getCreatedAt() != null && user.getCreatedAt().toLocalDate().equals(today)).count();
+        long newUsersToday = users.stream().filter(user -> user.getCreatedAt() != null && user.getCreatedAt().toLocalDate().isEqual(today)).count();
 
-        Map<String, Object> response = new LinkedHashMap<String, Object>();
+        Map<String, Object> response = new LinkedHashMap<>();
         response.put("users", users);
         response.put("totalUsers", userService.countUsers());
         response.put("activeUsers", activeUsers);
