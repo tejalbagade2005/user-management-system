@@ -38,14 +38,13 @@ public class SecurityConfig {
 
   @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    return http
+    http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-    .antMatchers("/api/auth/**").permitAll()
-    .antMatchers("/api/users/**").permitAll()
-    .anyRequest().authenticated()
-)
-        .build();
+            .anyRequest().permitAll() // Abhi testing ke liye saare endpoints public kar diye hain
+        );
+
+    return http.build();
 }
     @Bean
 public CorsConfigurationSource corsConfigurationSource() {
