@@ -22,7 +22,7 @@ public class UserController {
 
     @GetMapping
     public List<String> getAllUsers() {
-        return Arrays.asList("Test User 1", "Test User 2");
+        return Arrays.asList("User 1", "User 2");
     }
     private final UserService userService;
 
