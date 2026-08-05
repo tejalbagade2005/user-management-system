@@ -36,30 +36,37 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .cors(Customizer.withDefaults())
-            .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-            
-            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
+  @Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        return http.build();
-    }
+    http
+        .csrf().disable()
+        .cors().and()
+        .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeRequests()
+            .antMatchers("/api/auth/**", "/api/users/**")
+            .permitAll()
+            .anyRequest()
+            .authenticated();
 
+    http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+
+    return http.build();
+}
     @Bean
 public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     
-    // Sabhi Vercel deployment subdomains aur local origin allow karein
+    // Sabhi Vercel deployment domains aur local ko allow karein
     configuration.setAllowedOriginPatterns(Arrays.asList(
         "http://localhost:3000",
         "https://*.vercel.app"
     ));
     
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(Arrays.asList("*"));
+    configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
     configuration.setAllowCredentials(true);
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
