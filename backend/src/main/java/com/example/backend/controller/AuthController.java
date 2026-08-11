@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:3001", "https://user-management-system-ten-gold.vercel.app"}, allowCredentials = "true")
+@CrossOrigin(origins = "*")
 public class AuthController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
