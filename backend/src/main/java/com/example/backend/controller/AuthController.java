@@ -35,34 +35,29 @@ public class AuthController {
         this.userRepository = userRepository;
     }
 
-    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> register(@RequestBody Map<String, String> requestBody) {
-        if (requestBody == null) {
-            return ResponseEntity.badRequest().body(createErrorResponse("Request body is required"));
-        }
-
-        try {
-            User user = new User();
-            user.setFullName(requestBody.getOrDefault("fullName", "").trim());
-            user.setEmail(requestBody.getOrDefault("email", "").trim());
-            user.setMobile(requestBody.getOrDefault("mobile", ""));
-            user.setUsername(requestBody.getOrDefault("username", "").trim());
-            user.setPassword(requestBody.getOrDefault("password", ""));
-
-            User saved = userService.register(user);
-            Map<String, Object> response = new HashMap<String, Object>();
-            response.put("message", "User registered successfully");
-            Map<String, Object> userResponse = new LinkedHashMap<String, Object>();
-            userResponse.put("id", saved.getId());
-            userResponse.put("username", saved.getUsername());
-            userResponse.put("email", saved.getEmail());
-            userResponse.put("fullName", saved.getFullName());
-            response.put("user", userResponse);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(createErrorResponse(ex.getMessage()));
-        }
+    @PostMapping("/register")
+public ResponseEntity<?> register(@RequestBody Map<String, String> requestBody) {
+    if (requestBody == null || requestBody.isEmpty()) {
+        return ResponseEntity.badRequest().body(createErrorResponse("Request body cannot be empty"));
     }
+
+    try {
+        User user = new User();
+        user.setFullName(requestBody.getOrDefault("fullName", ""));
+        user.setEmail(requestBody.getOrDefault("email", ""));
+        user.setMobile(requestBody.getOrDefault("mobile", ""));
+        user.setUsername(requestBody.getOrDefault("username", ""));
+        user.setPassword(requestBody.getOrDefault("password", ""));
+
+        User saved = userService.register(user);
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "User registered successfully");
+        return ResponseEntity.ok(response);
+    } catch (Exception e) {
+        return ResponseEntity.badRequest().body(createErrorResponse(e.getMessage()));
+    }
+}
+    
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
