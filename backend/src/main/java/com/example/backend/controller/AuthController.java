@@ -1,112 +1,47 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.User;
-import com.example.backend.repository.UserRepository;
-import com.example.backend.security.JwtUtil;
 import com.example.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
 public class AuthController {
-    private final UserService userService;
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
 
     @Autowired
-    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserRepository userRepository) {
-        this.userService = userService;
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
-        this.userRepository = userRepository;
-    }
+    private UserService userService;
 
     @PostMapping("/register")
-public ResponseEntity<?> register(@RequestBody Map<String, String> requestBody) {
-    if (requestBody == null || requestBody.isEmpty()) {
-        return ResponseEntity.badRequest().body(createErrorResponse("Request body cannot be empty"));
-    }
-
-    try {
-        User user = new User();
-        user.setFullName(requestBody.getOrDefault("fullName", ""));
-        user.setEmail(requestBody.getOrDefault("email", ""));
-        user.setMobile(requestBody.getOrDefault("mobile", ""));
-        user.setUsername(requestBody.getOrDefault("username", ""));
-        user.setPassword(requestBody.getOrDefault("password", ""));
-
-        User saved = userService.register(user);
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "User registered successfully");
-        return ResponseEntity.ok(response);
-    } catch (Exception e) {
-        return ResponseEntity.badRequest().body(createErrorResponse(e.getMessage()));
-    }
-}
-    
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
-        String usernameOrEmail = body.getOrDefault("username", "").trim();
-        String password = body.getOrDefault("password", "");
-
-        if (usernameOrEmail == null || usernameOrEmail.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body(createErrorResponse("Username/email and password are required"));
+    public ResponseEntity<?> register(@RequestBody Map<String, String> requestBody) {
+        if (requestBody == null || requestBody.isEmpty()) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "Request body cannot be empty");
+            return ResponseEntity.badRequest().body(error);
         }
 
         try {
-            User user = userRepository.findByUsername(usernameOrEmail)
-                    .orElseGet(() -> userRepository.findByEmail(usernameOrEmail).orElseThrow(() -> new BadCredentialsException("Invalid credentials")));
+            User user = new User();
+            user.setFullName(requestBody.getOrDefault("fullName", ""));
+            user.setEmail(requestBody.getOrDefault("email", ""));
+            user.setMobile(requestBody.getOrDefault("mobile", ""));
+            user.setUsername(requestBody.getOrDefault("username", ""));
+            user.setPassword(requestBody.getOrDefault("password", ""));
 
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), password));
-            String token = jwtUtil.generateToken(user.getUsername());
+            userService.register(user);
 
-            Map<String, Object> response = new HashMap<String, Object>();
-            response.put("token", token);
-            Map<String, Object> userResponse = new LinkedHashMap<String, Object>();
-            userResponse.put("id", user.getId());
-            userResponse.put("username", user.getUsername());
-            userResponse.put("email", user.getEmail());
-            userResponse.put("fullName", user.getFullName());
-            userResponse.put("mobile", user.getMobile());
-            userResponse.put("role", user.getRole());
-            response.put("user", userResponse);
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "User registered successfully");
             return ResponseEntity.ok(response);
-        } catch (AuthenticationException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(createErrorResponse("Invalid credentials"));
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(createErrorResponse(ex.getMessage()));
+        } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
-        return ResponseEntity.ok(createMessageResponse("Logged out successfully"));
-    }
-
-    private Map<String, Object> createErrorResponse(String message) {
-        Map<String, Object> response = new LinkedHashMap<String, Object>();
-        response.put("error", message);
-        return response;
-    }
-
-    private Map<String, Object> createMessageResponse(String message) {
-        Map<String, Object> response = new LinkedHashMap<String, Object>();
-        response.put("message", message);
-        return response;
     }
 }
